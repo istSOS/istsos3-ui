@@ -5,8 +5,8 @@
     "main": "build/index.js",
     "proxy": "http://localhost:8887",
     "scripts": {
-        "build": "babel lib -d build",
-        "build:watch": "babel lib -w -d build",
+        "build": "babel lib -d build --copy-files",
+        "build:watch": "babel lib -w -d build --copy-files",
         "lint": "eslint lib/**; exit 0",
         "lint:watch": "esw -w lib/**",
         "prepublish": "npm run build",
@@ -16,15 +16,16 @@
     "author": "",
     "license": "ISC",
     "peerDependencies": {
+        "istsos3-core": "^1.0.0",
         "moment": "^2.20.1",
         "ol": "^4.6.4",
         "prop-types": "^15.6.0",
         "react": "^16.2.0",
         "react-dom": "^16.2.0",
         "react-redux": "^5.0.7",
-        "istsos3-core": "^1.0.0",
         "semantic-ui-css": "^2.2.12",
-        "semantic-ui-react": "^0.77.1"
+        "semantic-ui-react": "^0.77.1",
+        "underscore": "^1.8.3"
     },
     "devDependencies": {
         "@storybook/addon-actions": "^3.3.15",
@@ -50,7 +51,8 @@
         "react-dom": "^16.2.0",
         "react-redux": "^5.0.7",
         "semantic-ui-css": "^2.2.12",
-        "semantic-ui-react": "^0.77.1"
+        "semantic-ui-react": "^0.77.1",
+        "underscore": "^1.8.3"
     },
     "dependencies": {}
 }

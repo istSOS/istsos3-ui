@@ -3,7 +3,11 @@ import { Provider } from 'react-redux';
 
 import { storiesOf } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
-import { withKnobs, text, boolean, number, select } from '@storybook/addon-knobs/react';
+import {
+    withKnobs,
+    text, boolean, number,
+    select
+} from '@storybook/addon-knobs/react';
 
 import 'react-day-picker/lib/style.css';
 import 'ol/ol.css';
@@ -18,14 +22,20 @@ import Mappa from '../lib/mappa/mappa';
 import FoisMap from '../lib/mappa/foisMap';
 
 import {
+    DateInput,
+    Sensors,
     Uoms,
     ObservedProperties,
     ObservationTypes,
     SamplingTypes,
+    Materials,
     Fois,
     SensorForm,
     FoiForm,
-    Humans
+    SpecimenForm,
+    ProcessingDetails,
+    Humans,
+    SamplingMethod
 } from '../lib';
 
 storiesOf('List', module)
@@ -38,6 +48,10 @@ storiesOf('List', module)
             {story()}
         </div>
     </Provider>)
+    .add('Sensors', () => (
+        <Sensors
+            layout='list'/>
+    ))
     .add('Uoms', () => (
         <Uoms
             layout={text('Label', 'list')}/>
@@ -70,6 +84,10 @@ storiesOf('Dropdown', module)
             layout={text('Label', 'dropdown')}
             onSelected={action('onSelected')}/>
     ))
+    .add('Uoms', () => (
+        <Uoms
+            layout='dropdown'/>
+    ))
     .add('Observed Properties', () => (
         <ObservedProperties
             layout={select('Layout', {
@@ -84,6 +102,30 @@ storiesOf('Dropdown', module)
                 dropdown: 'dropdown'
             }, 'dropdown')}
             onSelected={action('onSelected')}/>
+    ))
+    .add('Materials', () => (
+        <Materials/>
+    ))
+    .add('Sampling Methods', () => (
+        <SamplingMethod/>
+    ))
+    .add('Processing details', () => (
+        <ProcessingDetails/>
+    ));
+
+storiesOf('Date', module)
+    .addDecorator(withKnobs)
+    .addDecorator(story => <Provider
+        store={store}>
+        <div style={{
+            padding: "2em"
+        }}>
+            {story()}
+        </div>
+    </Provider>)
+    .add('Date input', () => (
+        <DateInput
+            onChange={action('date-changed')}/>
     ));
 
 const foiType = {};
@@ -97,7 +139,12 @@ storiesOf('Forms', module)
     .addDecorator(story => <Provider
         store={store}>
         <div style={{
-            padding: "0px 2em"
+            padding: "0px 2em",
+            height: "900px",
+            width: "100%",
+            flex: "1 1 0%",
+            // display: 'flex',
+            // flexDirection: 'row'
         }}>
             {story()}
         </div>
@@ -124,6 +171,30 @@ storiesOf('Forms', module)
                     setting._SAMPLING_SURFACE
                 ], null, 'frm-02-02')
             }/>
+        ))
+    .add('Feature of interest (with map)', () => (
+        <FoiForm
+            showMap={true}
+            onChange={action('foim-onChange')}
+            foiType={setting._SAMPLING_POINT}/>
+        ))
+    .add('Specimen Metadata', () => (
+        <SpecimenForm
+            layout={
+                select('Layout', [
+                    'metadata',
+                    'processing',
+                    'both',
+                    'template'
+                ], 'metadata')
+            }
+            onChange={action('specimen-onChange')}/>
+        ))
+    .add('Specimen Processing w/o time', () => (
+        <SpecimenForm
+            layout='processing'
+            hidden={['time']}
+            onChange={action('specimen-onChange')}/>
         ));
 
 storiesOf('Maps', module)
@@ -137,4 +208,17 @@ storiesOf('Maps', module)
         </div>
     </Provider>)
     .add('Simple', () => (<Mappa/>))
-    .add('With fois', () => (<FoisMap/>));
+    .add('With fois', () => (
+        <FoisMap/>))
+    .add('Edit Point', () => (
+        <Mappa
+            fois={[]}
+            editing='Point'
+            foi={{
+                shape: {
+                    type: 'Point',
+                    coordinates: []
+                }
+            }}
+            changefeature={action('changefeature')}
+            addfeature={action('addfeature')}/>));
